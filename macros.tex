@@ -1,0 +1,94 @@
+% A set of least-invasive, battle-tested LaTeX macros and packages
+% Include this using \input{texsanity}
+
+
+% Per document settings:
+% https://tex.stackexchange.com/questions/79395/option-clash-for-hyperref-package
+%\usepackage[english]{babel}
+%\selectlanguage{english}
+%\hypersetup{
+%  pdfauthor={Rob Ward},
+%  pdftitle={CV for Rob Ward},
+%  pdfsubject={Detailed CV for Rob}
+%}
+
+\newcommand{\turl}[2]{\url{#1}, last access on #2}
+\newcommand{\footurl}[2]{\footnote{\hspace{-0.9em}\turl{#1}{#2}.}}
+
+
+\newcommand{\term}[1]{{\small\texttt{#1}}}
+\newcommand{\fixxme}[1]{\textbf{\color{red}?? {#1}}}
+
+
+\newcommand{\forcenewline}{\hspace*{1em}\\}
+
+
+\usepackage[utf8]{inputenc}
+
+
+\usepackage{varioref}
+\usepackage{cleveref}
+
+
+% https://tex.stackexchange.com/questions/35043/reference-different-places-to-the-same-footnote
+% Allows refering to labeled footnotes
+\makeatletter
+\newcommand\footnoteref[1]{\protected@xdef\@thefnmark{\ref{#1}}\@footnotemark}
+\makeatother
+
+
+% Allows to import other pdfs
+\usepackage{pdfpages}
+%\includepdf[pages={5,8,10-14}]{internal_rate_of_return.pdf}
+
+% Rotated full pages
+\usepackage{pdflscape}
+%\begin{landscape}
+%\end{landscape}
+
+
+% Beautiful tables
+\usepackage{booktabs}
+%\begin{tabular}{@{}llr@{}} \toprule
+% \multicolumn{2}{c}{Artikel} \\ \cmidrule(r){1-2}
+% Tier  & Beschreibung & Preis (\$)\\ \midrule
+% Mücke & pro Gramm    & 13.65 \\
+%       & pro Stück    & 0.01 \\
+% Gnu   & ausgestopft  & 92.50 \\
+% Emu   & ausgestopft  & 33.33 \\
+% Gürteltier & gefroren & 8.99 \\ \bottomrule
+%\end{tabular}
+
+
+% Checkmark and "x" symbols
+% https://tex.stackexchange.com/questions/42619/x-mark-to-match-checkmark#42620
+\usepackage{pifont}% http://ctan.org/pkg/pifont
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+
+
+\usepackage[final, pdftex=true, bookmarks=true, bookmarksopenlevel=1, breaklinks=true, pdfstartview=Fit,
+	colorlinks=false,hidelinks,
+	bookmarksdepth=4]{hyperref}
+
+% Break URLs at every character
+% http://texwelt.de/wissen/fragen/13639/url-mehrzeilige-sauber-im-blocksatz-umbrechen
+\makeatletter
+\g@addto@macro\UrlBreaks{
+  \do\a\do\b\do\c\do\d\do\e\do\f\do\g\do\h\do\i\do\j
+  \do\k\do\l\do\m\do\n\do\o\do\p\do\q\do\r\do\s\do\t
+  \do\u\do\v\do\w\do\x\do\y\do\z\do\&\do\1\do\2\do\3
+  \do\4\do\5\do\6\do\7\do\8\do\9\do\0}
+ \def\do@url@hyp{\do\-}
+ \g@addto@macro\UrlSpecials{\do\/{\mbox{\UrlFont/}\hskip 0pt plus 2pt}}
+\makeatother
+
+
+% multi-column & multi-row
+% http://texblog.org/2012/12/21/multi-column-and-multi-row-cells-in-latex-tables/
+\usepackage{multirow}
+%\multicolumn{number cols}{align}{text} % align: l,c,r
+%\multirow{number rows}{width}{text}
+
+
+

@@ -1,0 +1,227 @@
+%!TEX root = main.tex
+% Glossary + Acronym list
+% Notice: \n{} is the remainder of an overengineered glossary / acronym solution. A lot can be simplified in the code below
+
+% Useful commands:
+% \glsresetall
+% \glsentrylong
+% \gls{api} - \glspl{api}
+
+
+% Use this commands to print the glossary
+% \glossarystyle{listhypergroup}
+% \printglossary[type=main]
+
+% Compile with using
+%  makeglossaries main
+
+
+% https://tex.stackexchange.com/questions/170725/glossaries-package-no-long-form-the-first-time-using-an-acronym
+%If there is an unusual acronym (say XYZ) that does require the long form on its first use, then add the line
+%\glslocalreset{GNU}
+
+
+\usepackage{makeidx}
+\makeindex
+
+
+\makeatletter
+\def\ifEmpty#1{\def\@temp{#1}\ifx\@temp\@empty}
+\makeatother
+
+
+\newcommand{\intronpl}[2][]{\emph{\glspl{glossary-{#1}}}}
+\newcommand{\intron}[2][]{\intro[#1]{#2}}
+\newcommand{\intro}[2][]{%
+\ifEmpty{#1}%
+\label{#2}%
+\ifglsentryexists{glossary-{#2}}{\emph{\gls{glossary-{#2}}}}{%
+\ifglsentryexists{#2}{\emph{\gls{#2}}}{%
+\emph{#2}}}%
+\else%
+\label{#1}%
+\ifglsentryexists{glossary-{#1}}{\emph{\gls{glossary-{#1}}}}{%
+\ifglsentryexists{#1}{\emph{\gls{#1}}}{%
+\emph{#2}}}%
+\fi}
+
+%\newcommand{\intro}[2][]{\emph{{#2}}\label{#2}\ifEmpty{#1}\index{{#2}}\else\index{#1!{{#2}}}%\index{{#2}|seealso{#1}}\fi}
+
+\newcommand{\introgls}[2][]{\glsreset{#2}\emph{\gls{#2}}\label{#2}\ifEmpty{#1}\index{\gls{#2}}\else\index{#1!{\gls{#2}}}\index{\gls{#2}|seealso{#1}}\fi}
+
+\newcommand{\cf}[1]{%
+%(cf.
+%"\nameref{#1}",
+(\Vref{#1})%
+}
+\newcommand{\cfn}[1]{(\Vref{#1})}
+\newcommand{\cfnn}[1]{\nameref{#1} (\Vref{#1})}
+
+
+
+
+
+
+
+\usepackage[acronym,nopostdot]{glossaries}
+\usepackage{etoolbox}
+\makeglossaries
+
+% \myacronym[<Optional Special Short Form>{<Referenced Label>}{<Long Form>}]
+\newcommand{\myacronym}[3][]{
+	\newglossaryentry{#2}
+	{
+	    name={\ifstrequal{#1}{}{#2}{#1}},
+	    long={#3},
+	    description={#3},
+	    sort={#2},
+	    first={\glsentrylong{#2} (\glsentryname{#2})},
+	    firstplural={\glsentrylong{#2}s (\glsentryname{#2}s)},
+	    type=\acronymtype
+	 }
+}
+
+\usepackage{xparse}
+
+% \myacronym[<Optional Long Form>][<Optional Special Short Form>]{<Key>}{<Description>}]
+\DeclareDocumentCommand\myglossary{O{} O{} m m}{%
+	\ifstrequal{#4}{}{}{
+		\newglossaryentry{glossary-{#3}}{
+		   long={\ifstrequal{#1}{}{#3}{#1}},
+		   name={\ifstrequal{#2}{}{#3}{#2}},
+		   description={\ifstrequal{#1}{}{}{(#1) }#4},
+		   sort={#3},
+	 	   first={\glsentrylong{glossary-{#3}}\ifstrequal{#1}{}{}{ (\glsentryname{glossary-{#3}})}}
+		}
+	}
+	\ifstrequal{#1}{}{}{
+		\newglossaryentry{#3}{
+			type=\acronymtype,
+			name={\ifstrequal{#2}{}{#3}{#2}},
+		    long={#1},
+		    description={#1},
+		    sort={#3},
+		    first=\glsentrylong{#3} (\glsentryname{#3}),
+		    firstplural={\glsentrylong{#3}s (\glsentryname{#3}s)}
+		 }
+	}
+}
+
+% \n{<label>} references glossary entries and acronyms
+\newcommand{\n}[1]{\ifglsentryexists{glossary-{#1}}{\gls{glossary-{#1}}}{\gls{#1}}\ifglsentryexists{#1}{\glsadd{#1}}{\glsadd{glossary-{#1}}}}
+\newcommand{\npl}[1]{\ifglsentryexists{glossary-{#1}}{\glspl{glossary-{#1}}}{\glspl{#1}}\ifglsentryexists{#1}{\glsadd{#1}}{\glsadd{glossary-{#1}}}}
+
+%\myacronym{WWW}{World Wide Web}
+\newglossaryentry{WWW}{
+			type=\acronymtype,
+			name={Web},
+		    long={World Wide Web},
+		    description={World Wide Web},
+		    sort={World Wide Web},
+		    first={World Wide Web (WWW, \textit{Web})},
+		 }
+
+% \in{<label>} intro variant of \n
+%\newcommand{\intron}[1]{}
+%\ifglsentryexists{glossary-{#1}}{\glsreset{glossary-{#1}}}{\glsreset{#1}}\emph{\n{#1}}\label{#1}}
+
+\newglossaryentry{GLAM}{
+			type=\acronymtype,
+			name={GLAM},
+		    long={Gallery, Library, Archive, and Museum},
+		    sort={GLAM},
+		   	description={Gallery, Library, Archive, and Museum},
+			first={\glsentrylong{GLAM} (\glsentryname{GLAM})},
+		    firstplural={galleries, libraries, archives and museums (GLAMs)},
+		    }
+
+\newglossaryentry{ACID}{
+	type=\acronymtype,
+	name={ACID},
+	sort={ACID},
+	description={Atomicity, Consistency, Isolation, Durability},
+	first={atomicity, consistency, isolation, durability (\glsentryname{ACID})}
+}
+
+
+\myacronym[GZIP]{GZIP}{Gnu ZIP}
+\myacronym[LDBC SPB]{LDBCSPB}{Linked Data Benchmark Council Semantic Publishing Benchmark}
+\myacronym[SP\textsuperscript{2}Bench]{SP2Bench}{{SPARQL} Performance Benchmark}
+\myacronym[\ensuremath{p}]{p}{Precision}
+\myacronym{AJAX}{Asynchronous JavaScript and XML}
+\myacronym{API}{Application Programming Interface}{}
+\myacronym{BBC}{British Broadcasting Corporation}
+\myacronym{BSBM}{Berlin \gls{SPARQL} Benchmark}
+\myacronym{CEP}{Complex Event Processing}
+\myacronym{CERN}{European Organization for Nuclear Research}
+\myacronym{CFL}{Comprehensive, Functional, Layered Architecture}
+\myacronym{CH}{Cultural Heritage}
+\myacronym{CI}{Continuous Integration}
+\myacronym{CKAN}{Comprehensive Knowledge Archive Network}
+\myacronym{CMS}{Content Management System}
+\myacronym{CRUD}{Create, Read, Update, Delete}
+\myacronym{CSS}{Cascading Style Sheet}
+\myacronym{CSV}{Comma-separated values}
+\myacronym{DBMS}{Database Management System}
+\myacronym{DBPSB}{DBpedia \gls{SPARQL} Benchmark}
+\myacronym{DSL}{Domain Specific Language}
+\myacronym{ETL}{Extraction, Transform, Load}
+\myacronym{GND}{Gemeinsame Normdatei \textit{(Integrated Authority File)}}
+\myacronym{GNU}{GNU is Not Unix}
+\myacronym{GTFS}{General Transit Feed Specification}
+\myacronym{GUI}{Graphical User Interface}
+\myacronym{HTML}{Hypertext Markup Language}
+\myacronym{HTTP}{Hypertext Transfer Protocol}
+\myacronym{HeBIS}{Hessisches Bibliotheks- und Informationssystem \textit{(Library and Information System of Hesse)}}
+\myacronym{IETF}{Internet Engineering Task Force}
+\myacronym{IMS}{Identity Mapping Service}
+\myacronym{IRS}{Identity Resolution Service}
+\myacronym{IR}{Information Retrieval}
+\myacronym{JDBC}{Java Database Connectivity}
+\myacronym{JSON}{JavaScript Object Notation}
+\myacronym{JVM}{{Java} Virtual Machine}
+\myacronym{KDD}{Knowledge Discovery in Databases}
+\myacronym{LLOD}{Linguistic Linked and Open Data}
+\myacronym{LMF}{Linked Media Framework}
+\myacronym{LUBM}{Lehigh University Benchmark}
+\myacronym{LarKC}{Large Knowledge Collider}
+\myacronym{LoC}{Lines of Code}
+\myacronym{MARC}{Machine-Readable Catalog}
+\myacronym{MODS}{Metadata Object Description Schema}
+\myacronym{MT}{Machine Translation}
+\myacronym{NER}{Named Entity Recognition}
+\myacronym{NGO}{Non Governmental Organisation}
+\myacronym{NLP}{Natural Language Processing}
+\myacronym{NoSQL}{Not Only SQL}
+\myacronym{OAI-PMH}{Open Archives Initiative Protocol for Metadata Harvesting}
+\myacronym{ODBC}{Open Database Connectivity}
+\myacronym{OKFN}{Open Knowledge Foundation}
+\myacronym{OLAP}{Online Analytical Processing}
+\myacronym{OS}{Operating System}
+\myacronym{OWL}{Web Ontology Language}
+\myacronym{PCDHN}{Pan-Canadian Documentary Heritage Network}
+\myacronym{PDF}{Portable Document Format}
+\myacronym{PHP}{PHP Hypertext Preprocessor}
+\myacronym{RDBMS}{Relational Database Management System}
+\myacronym{RDFS}{\gls{RDF} Schema}
+\myacronym{RDF}{Resource Description Framework}
+\myacronym{REST}{Representational State Transfer}
+\myacronym{RFC}{Request for Comments}
+\myacronym{RSS}{Really Simple Syndication}
+\myacronym{SDF}{Simple Data Format}
+\myacronym{SPARQL}{SPARQL Query Language}
+\myacronym{SQL}{Structured Query Language}
+\myacronym{SRU}{Search/Retrieval via URL}
+\myacronym{SVN}{Subversion}
+\myacronym{TSV}{Tabular-separated Values}
+\myacronym{UI}{User Interface}
+\myacronym{ULB}{University and State Library Darmstadt}
+\myacronym{UML}{Unified Modeling Language}
+\myacronym{URI}{Uniform Resource Identifier}
+\myacronym{URL}{Uniform Resource Locator}
+\myacronym{UX}{User Experience}
+\myacronym{VIAF}{Virtual International Authority File}
+\myacronym{W3C}{World Wide Web Consortium}
+\myacronym{WHATWG}{Web Hypertext Application Technology Working Group}
+\myacronym{WSDL}{Web Services Description Language}
+\myacronym{XML}{Extensible Markup Language}

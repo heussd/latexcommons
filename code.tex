@@ -1,0 +1,59 @@
+% Code listings in LaTeX
+% Include this using \input{latexcommons/code}
+
+%\lstset{language=Pascal}
+%\begin{lstlisting}
+%Put your code here.
+%\end{lstlisting}
+
+
+\usepackage{listings}
+\usepackage{listingsutf8}
+\usepackage{lstautogobble}
+
+
+\lstloadlanguages{Java}
+\lstloadlanguages{XML}
+\lstloadlanguages{SQL}
+\lstloadlanguages{SPARQL}
+
+
+\lstdefinelanguage{RDF} {
+  morekeywords={@prefix,label,wikiPageDisambiguates,developer,inverseOf,@en,@de,subClassOf,type},
+  sensitive=false,
+  morecomment=[s]{<}{>},
+  morestring=[b]"
+}
+
+
+\definecolor{codegreen}{rgb}{0,0,0}
+\definecolor{codegray}{rgb}{0,0,0}
+\definecolor{codepurple}{rgb}{0,0,0}
+\definecolor{backcolour}{rgb}{1,1,1}
+
+
+\lstset{
+    basicstyle=\tiny\ttfamily,
+    numbers=left,
+    numberstyle=\tiny,
+    backgroundcolor=\color{backcolour},   
+    commentstyle={\color{Gray}},
+    keywordstyle={\bfseries},
+    lineskip={-1.5pt},
+    basicstyle=\scriptsize\ttfamily,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=false,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    literate={\ \ }{{\ }}1,
+    columns=flexible,
+	autogobble=true,
+	tabsize=1,
+}
+\lstset{caption={\textbf{\color{red}THIS LISTING IS UNNAMED}}}
