@@ -1,13 +1,12 @@
 #!/bin/bash
+# Battle-tested instructions to build LaTeX files
 
-
-
-
-
-MAINTEXFILE="main"
+LATEX_OPTS="-halt-on-error -interaction=errorstopmode"
 
 function removeExt() {
-	find . -iname "*.$1" -print0 | xargs -0 rm -rf
+	#find . -iname "*.$1" -print0 | xargs -0 rm -rf
+	# Recursive deletion seems to break git repos..
+	rm "*.$1"
 }
 
 function clean {
@@ -26,7 +25,6 @@ function clean {
 	removeExt "lol"
 }
 
-
 if [ -z $1 ]; then
 	# No parameter provided. Assume that this script has been executed as a submodule of a LaTeX project. Navigate to that root and take first best .tex
 	pushd ..
@@ -39,21 +37,20 @@ if [ -z "$MAINTEXFILE" ]; then
 	exit
 fi
 echo "Found .tex file $MAINTEXFILE"
-exit
 
 clean
 
-pdflatex $MAINTEXFILE
+pdflatex $LATEX_OPTS $MAINTEXFILE
 
 bibtex $MAINTEXFILE
 makeglossaries $MAINTEXFILE
 makeindex $MAINTEXFILE
 
-pdflatex $MAINTEXFILE
+pdflatex $LATEX_OPTS $MAINTEXFILE
 # Do not continue if pdflatex was unsuccessfull
 if [ $? -ne 0 ]; then exit; fi 
-pdflatex $MAINTEXFILE
-pdflatex $MAINTEXFILE
+pdflatex $LATEX_OPTS $MAINTEXFILE
+pdflatex $LATEX_OPTS $MAINTEXFILE
 
 texcount $MAINTEXFILE.tex -merge -html > countResult.html
 
